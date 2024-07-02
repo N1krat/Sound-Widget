@@ -4,6 +4,8 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
 import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
+
+
 class App(tk.Tk): 
     def __init__(self):
         super().__init__()
@@ -63,9 +65,12 @@ next_button.image = next_image
 rewind_button.image = rewind_image
 
 # Bttn positions and padding
-rewind_button.grid(row=0, column=0, padx=10, pady=10)
-play_pause_button.grid(row=0, column=1, padx=10, pady=10)
-next_button.grid(row=0, column=3, padx=10, pady=10)
+bottom_frame = tk.Frame(app)
+bottom_frame.pack(side=tk.BOTTOM, pady=20)  
+
+rewind_button.pack(side=tk.LEFT, padx=10)  
+play_pause_button.pack(side=tk.LEFT, padx=10)
+next_button.pack(side=tk.LEFT, padx=10)
 
 # Gettin defalt audio and sessions to change the volume
 devices = AudioUtilities.GetSpeakers()
@@ -78,14 +83,11 @@ for session in sessions:
     volume = session._ctl.QueryInterface(ISimpleAudioVolume)
     if session.Process and session.Process.name() == "Spotify.exe": 
         volume.SetMasterVolume(1, None)
-    elif session.Process and session.Process.name() == "chrome.exe":
-        volume.SetMasterVolume(1, None)
-
 
 
 
 # Apps global settings
-app.geometry("400x400")
+app.geometry("400x200")
 app.resizable(False, False)
 app.title("Audio Player")
 app.wm_attributes('-toolwindow', 'True')
