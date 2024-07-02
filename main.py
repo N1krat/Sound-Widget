@@ -69,7 +69,6 @@ next_button.image = next_image
 rewind_button.image = rewind_image
 
 # Bttn positions and padding
-print(spotilib.song())
 
 bottom_frame = tk.Frame(app)
 bottom_frame.pack(side=tk.BOTTOM, pady=20)  
