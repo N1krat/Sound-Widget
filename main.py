@@ -4,7 +4,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
 import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
-
+import spotilib
 
 class App(tk.Tk): 
     def __init__(self):
@@ -15,16 +15,16 @@ app = App()
 is_playing = False
 
 def play():
-    print("play")
+    spotilib.play()
 
 def pause(): 
-    print("pause")
+    spotilib.play()
 
 def forward(): 
-    print("forward")
+    spotilib.forward()
 
 def rewind(): 
-    print("rewind")
+    spotilib.previous()
 
 def update_play_pause_button():
     if is_playing:
@@ -46,13 +46,17 @@ def resize_image(image_path, width, height):
     resized_image = original_image.resize((width, height), Image.LANCZOS)
     return ImageTk.PhotoImage(resized_image)
 
+# volume funct
+def volume(value): 
+    volume.SetMasterVolume(volume_slider.get() / 100, None)
+
 
 # Load buttn images
 button_width, button_height = 50, 50
-play_image = resize_image("Sound-Widget/img/play.png", button_width, button_height)
-pause_image = resize_image("Sound-Widget/img/pause.png", button_width, button_height)
-next_image = resize_image("Sound-Widget/img/fast-forward.png", button_width, button_height)
-rewind_image = resize_image("Sound-Widget/img/rewind-button.png", button_width, button_height)
+play_image = resize_image("img/play.png", button_width, button_height)
+pause_image = resize_image("img/pause.png", button_width, button_height)
+next_image = resize_image("img/fast-forward.png", button_width, button_height)
+rewind_image = resize_image("img/rewind-button.png", button_width, button_height)
 
 # Creting bttns
 play_pause_button = tk.Button(app, image=play_image, command=toggle_play_pause)
@@ -65,12 +69,20 @@ next_button.image = next_image
 rewind_button.image = rewind_image
 
 # Bttn positions and padding
+print(spotilib.song())
+
 bottom_frame = tk.Frame(app)
 bottom_frame.pack(side=tk.BOTTOM, pady=20)  
 
 rewind_button.pack(side=tk.LEFT, padx=10)  
 play_pause_button.pack(side=tk.LEFT, padx=10)
 next_button.pack(side=tk.LEFT, padx=10)
+
+volume_slider = tk.Scale(app, from_=0, to=100, orient=tk.VERTICAL, command=volume)
+volume_slider.pack(padx=10, pady=10, fill=tk.Y)
+volume_slider.set(100)
+
+volume_slider.config(length=500, showvalue=0, tickinterval=20, digits=3)
 
 # Gettin defalt audio and sessions to change the volume
 devices = AudioUtilities.GetSpeakers()
@@ -81,7 +93,7 @@ sessions = AudioUtilities.GetAllSessions()
 
 for session in sessions: 
     volume = session._ctl.QueryInterface(ISimpleAudioVolume)
-    if session.Process and session.Process.name() == "Spotify.exe": 
+    if session.Process and session.Process.name() == "spotify.exe": 
         volume.SetMasterVolume(1, None)
 
 
@@ -89,6 +101,6 @@ for session in sessions:
 # Apps global settings
 app.geometry("400x200")
 app.resizable(False, False)
-app.title("Audio Player")
+app.title(" ")
 app.wm_attributes('-toolwindow', 'True')
 app.mainloop()
