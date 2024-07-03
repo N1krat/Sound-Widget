@@ -102,6 +102,9 @@ for session in sessions:
     volume = session._ctl.QueryInterface(ISimpleAudioVolume)
     if session.Process and session.Process.name() == "spotify.exe": 
         volume.SetMasterVolume(1, None)
+    # IN THE FUTURE who wants to change the volume to specific apps not only spotify or global volume
+    # you can add and elif with other procceses if you can find the one that is working
+    
 
 
 
